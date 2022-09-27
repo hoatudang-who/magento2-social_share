@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://duonght.com/license/.
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://duonght.com)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/colorpicker/css/colorpicker.css"/>
+    </head>
+</page>

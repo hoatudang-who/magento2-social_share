@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://duonght.com/license/.
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://www.duonght.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Duonght_SocialShare::social_share" title="Social Share" translate="title" module="Duonght_SocialShare" sortOrder="200" parent="Duonght_Core::extensions" resource="Duonght_SocialShare::social_share"/>
+        <add id="Duonght_SocialShare::configurations" title="Configuration" translate="title" module="Duonght_SocialShare" sortOrder="10" parent="Duonght_SocialShare::social_share" action="admin/system_config/edit/section/socialshare" resource="Duonght_SocialShare::settings"/>
+        <add id="Duonght_SocialShare::social" title="Social Share Report" translate="title" module="Duonght_SocialShare" sortOrder="20" parent="Duonght_SocialShare::social_share" action="social/share" resource="Duonght_SocialShare::social_share"/>
+    </menu>
+</config>

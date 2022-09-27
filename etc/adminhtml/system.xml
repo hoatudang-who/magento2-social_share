@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://duonght.com/license/.
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://www.duonght.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="socialshare" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1"
+            showInStore="1">
+            <class>separator-top</class>
+            <label>Social Share</label>
+            <tab>duonght</tab>
+            <resource>Duonght_SocialShare::settings</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                showInStore="1">
+                <label>General Settings</label>
+                <field id="version" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                    showInStore="1">
+                    <label>Current Version</label>
+                    <frontend_model>Duonght\SocialShare\Block\Adminhtml\Renderer\Config\Version</frontend_model>
+                </field>
+                <field id="enable_module" translate="label" type="select" sortOrder="20" showInDefault="1"
+                    showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sharecounter" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Share Counter</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="more_share" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Add More Share</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Choose “Yes” to display more Services on Frontend</comment>
+                </field>
+            </group>
+            <group id="button_config" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                showInStore="1">
+                <label>Button Configuration</label>
+                <group id="facebook" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Facebook</label>
+                    <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Sort</label>
+                    </field>
+                </group>
+                <group id="twitter" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Twitter</label>
+                    <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Sort</label>
+                    </field>
+                </group>
+                <group id="pinterest" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pinterest</label>
+                    <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Sort</label>
+                    </field>
+                </group>
+                <group id="linkedin" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>LinkedIn</label>
+                    <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                        <label>Sort</label>
+                    </field>
+                </group>
+            </group>
+            <group id="button_position" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                showInStore="1">
+                <label>Button Position</label>
+                <field id="cms_page" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Home Page and CMS Page</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Position</source_model>
+                </field>
+                <field id="categore_page" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Category Page</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Position</source_model>
+                </field>
+                <field id="product_page" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Product Page</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Position</source_model>
+                    <comment>Choose “Horizontal” to display below Wish List / Compare.</comment>
+                </field>
+                <field id="contact_page" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Contact Page</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Position</source_model>
+                </field>
+            </group>
+            <group id="button_style" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
+                showInStore="1">
+                <label>Button Style</label>
+                <field id="style" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Button Style</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Style</source_model>
+                </field>
+                <field id="icon_shape" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Icons Shape</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\IconStyle</source_model>
+                    <depends>
+                        <field id="style">icon</field>
+                    </depends>
+                </field>
+                <field id="icon_size" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Icons Size</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\ButtonSize</source_model>
+                    <comment>32x32 px button size is recommended.</comment>
+                    <depends>
+                        <field id="style">icon</field>
+                    </depends>
+                </field>
+                <field id="background_color" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Background Color</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\BackgroundColor</source_model>
+                </field>
+                <field id="custom_background_color" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Custom Background Color</label>
+                    <frontend_model>Duonght\SocialShare\Block\Color</frontend_model>
+                    <validate>jscolor {hash:true,refine:false}</validate>
+                    <depends>
+                        <field id="background_color">Custom</field>
+                    </depends>
+                </field>
+                <field id="color" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Color</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\Color</source_model>
+                </field>
+                <field id="custom_color" translate="label" type="text" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Custom Color</label>
+                    <frontend_model>Duonght\SocialShare\Block\Color</frontend_model>
+                    <validate>jscolor {hash:true,refine:false}</validate>
+                    <depends>
+                        <field id="color">Custom</field>
+                    </depends>
+                </field>
+                <field id="hover_style" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Hover Styles</label>
+                    <source_model>Duonght\SocialShare\Model\System\Config\Source\HoverStyle</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

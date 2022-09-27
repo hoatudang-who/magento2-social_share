@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://www.duonght.com/license.
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://www.duonght.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <socialshare>
+            <general>
+                <enable_module>1</enable_module>
+                <sharecounter>1</sharecounter>
+                <more_share>1</more_share>
+            </general>
+            <button_config>
+                <facebook>
+                    <enabled>1</enabled>
+                </facebook>
+                <twitter>
+                    <enabled>1</enabled>
+                </twitter>
+                <pinterest>
+                    <enabled>1</enabled>
+                </pinterest>
+                <linkedin>
+                    <enabled>1</enabled>
+                </linkedin>
+            </button_config>
+            <button_position>
+                <cms_page>left</cms_page>
+                <categore_page>left</categore_page>
+                <product_page>left</product_page>
+                <contact_page>left</contact_page>
+            </button_position>
+            <button_style>
+                <style>icon</style>
+                <icon_size>32x32</icon_size>
+                <background_color>standard</background_color>
+                <color>standard</color>
+            </button_style>
+        </socialshare>
+    </default>
+</config>

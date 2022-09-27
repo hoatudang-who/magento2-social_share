@@ -1,0 +1,372 @@
+<?php 
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://www.duonght.com/license
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://www.duonght.com)
+ */
+  
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $urlInterface  = $objectManager->get('Magento\Framework\UrlInterface');
+  $resource      = $objectManager->get('Magento\Framework\App\ResourceConnection');
+  $connection    = $resource->getConnection();
+  $tableShare    = $resource->getTableName('m2_social_share_details');
+  $tableReport   = $resource->getTableName('m2_social_share_report');
+  
+  $sqlTableReport = "Select * From " . $tableReport;
+  $tableReportCollection = $connection->fetchAll($sqlTableReport);
+  $sqlShareId = "Select Max(share_id) From " . $tableShare;
+  $firstShareId = $connection->fetchAll($sqlShareId);
+  foreach ($firstShareId as $firstId) {
+    $maxShareId = $firstId['Max(share_id)'];
+  }
+    
+  if (!empty($maxShareId)) {
+      $sqlInsertUrl = "Select shared_url From " . $tableShare . " Where share_id = " . $maxShareId;
+      $newUrl = $connection->fetchAll($sqlInsertUrl);
+    
+    foreach ($newUrl as $url) {
+      $insertUrl = $url['shared_url'];
+    }
+    $fbCountSql = "Select Count(social_name) FROM " . $tableShare . " Where social_name = 'Facebook' And shared_url = '" . $insertUrl . "'";
+    $fbCountReport = $connection->fetchAll($fbCountSql);
+    foreach ($fbCountReport as $CountReportFb) {
+      $fbReport = $CountReportFb['Count(social_name)'];
+    }
+    $twCountSql = "Select Count(social_name) FROM " . $tableShare . " Where social_name = 'Twitter' And shared_url = '" . $insertUrl . "'";
+    $twCountReport = $connection->fetchAll($twCountSql);
+    foreach ($twCountReport as $CountReportTw) {
+      $twReport = $CountReportTw['Count(social_name)'];
+    }
+    $pinCountSql = "Select Count(social_name) FROM " . $tableShare . " Where social_name = 'Pinterest' And shared_url = '" . $insertUrl . "'";
+    $pinCountReport = $connection->fetchAll($pinCountSql);
+    foreach ($pinCountReport as $CountReportPin) {
+      $pinReport = $CountReportPin['Count(social_name)'];
+    }
+    $linkCountSql = "Select Count(social_name) FROM " . $tableShare . " Where social_name = 'LinkedIn' And shared_url = '" . $insertUrl . "'";
+    $linkCountReport = $connection->fetchAll($linkCountSql);
+    foreach ($linkCountReport as $CountReportLink) {
+      $linkReport = $CountReportLink['Count(social_name)'];
+    }
+    $totalReport = $fbReport + $twReport + $pinReport + $linkReport;
+  
+    if(empty($tableReportCollection)) {
+      $sqlInsertReport = "Insert Into " . $tableReport . " (shared_url, facebook, twitter, pinterest, linkedin, total) Values ('" . $insertUrl . "', " . $fbReport . ", " . $twReport . ", " . $pinReport . ", " . $linkReport . ", " . $totalReport . ")";
+      $connection->query($sqlInsertReport);
+    }
+    foreach ($tableReportCollection as $reportCollection) {
+      $urlReport[] = $reportCollection['shared_url'];
+    }
+    
+    if (in_array($insertUrl, $urlReport)) {
+      if ($fbReport !== $reportCollection['facebook']) {
+        $fbUpdateReport = "Update " . $tableReport . " Set facebook = " . $fbReport . ", total = " . $totalReport . " Where shared_url = '" . $insertUrl . "'";
+        $connection->query($fbUpdateReport);
+      }
+      if ($twReport !== $reportCollection['twitter']) {
+        $twUpdateReport = "Update " . $tableReport . " Set twitter = " . $twReport . ", total = " . $totalReport . " Where shared_url = '" . $insertUrl . "'";
+        $connection->query($twUpdateReport);
+      }
+      if ($pinReport !== $reportCollection['pinterest']) {
+        $pinUpdateReport = "Update " . $tableReport . " Set pinterest = " . $pinReport . ", total = " . $totalReport . " Where shared_url = '" . $insertUrl . "'";
+        $connection->query($pinUpdateReport);
+      }
+      if ($linkReport !== $reportCollection['linkedin']) {
+        $linkUpdateReport = "Update " . $tableReport . " Set linkedin = " . $linkReport . ", total = " . $totalReport . " Where shared_url = '" . $insertUrl . "'";
+        $connection->query($linkUpdateReport);
+      }
+    }
+      else {
+        $sqlInsertReport = "Insert Into " . $tableReport . " (shared_url, facebook, twitter, pinterest, linkedin, total) Values ('" . $insertUrl . "', "  . $fbReport . ", " . $twReport . ", " . $pinReport . ", " . $linkReport . ", " . $totalReport . ")";
+        $connection->query($sqlInsertReport);
+      }
+  }
+  
+  $fbSql = "Select Count(share_id) FROM " . $tableShare . " Where social_name = 'Facebook'";
+  $fbShare = $connection->fetchAll($fbSql);
+  foreach ($fbShare as $fbSharing) {
+    $fbCount = $fbSharing['Count(share_id)'];
+  }
+  $twSql = "Select Count(share_id) FROM " . $tableShare . " Where social_name = 'Twitter'";
+  $twShare = $connection->fetchAll($twSql);
+  foreach ($twShare as $twSharing) {
+    $twCount = $twSharing['Count(share_id)'];
+  }
+  $pinSql = "Select Count(share_id) FROM " . $tableShare . " Where social_name = 'Pinterest'";
+  $pinShare = $connection->fetchAll($pinSql);
+  foreach ($pinShare as $pinSharing) {
+    $pinCount = $pinSharing['Count(share_id)'];
+  }
+  $linkSql = "Select Count(share_id) FROM " . $tableShare . " Where social_name = 'LinkedIn'";
+  $linkShare = $connection->fetchAll($linkSql);
+  foreach ($linkShare as $linkSharing) {
+    $linkCount = $linkSharing['Count(share_id)'];
+  }
+  $totalShared = $fbCount + $twCount + $pinCount + $linkCount;
+  $socialGroup = $block->isEnableService();
+  if (in_array('facebook', $socialGroup)) {
+    $facebook = 'button_fb';
+  }else{
+    $facebook = 'btn-off';
+  }
+  if (in_array('twitter', $socialGroup)) {
+    $twitter = 'button_tw';
+  }else{
+    $twitter = 'btn-off';
+  }
+  if (in_array('pinterest', $socialGroup)) {
+    $pin = 'button_pin';
+  }else{
+    $pin = 'btn-off';
+  }
+  if (in_array('linkedin', $socialGroup)) {
+    $linked = 'button_link';
+  }else{
+    $linked = 'btn-off';
+  }
+  
+?>
+<?php if ($block->isEnable() && $block->getProductPagePosition()): ?>
+  <?php if ($block->getProductPagePosition() === 'social-group-inline'): ?>
+  <style>
+    .background {
+      <?= /* @noEscape */ $block->isBackgroundColor()?>
+    }
+    
+    #tw-href, #link-href, #pin-href, #fb-href {
+      <?= /* @noEscape */ $block->isColor()?>
+      <?php if ($block->isButtonStyle() !== 5): ?>
+        <?=$block->getFontSize() ?>
+      <?php endif; ?>
+    }
+
+    .total-shared span {
+      <?php if ($block->isIconSize() === 'width:16px;height:16px;'): ?>
+        font-size: 0.8rem;
+      <?php endif; ?>
+    }
+
+    .button_fb {
+      order: <?=$block->isFacebookSort() ?>;
+    }
+    .button_tw {
+      order: <?=$block->isTwitterSort() ?>;
+    }
+    .button_pin {
+      order: <?=$block->isPinterestSort() ?>;
+    }
+    .button_link {
+      order: <?=$block->isLinkedinSort() ?>;
+    }
+
+    .fbSharing, .twSharing, .pinSharing, .linkSharing{
+      cursor: pointer;
+      <?=$block->isIconSize() ?>
+    }
+
+    .a2a_default_style a {
+      padding: 0;
+    }
+
+    .more-share {
+      <?= /* @noEscape */ $block->isBackgroundColor()?>
+    }
+
+    .a2a_svg {
+      border-radius: 50% !important;
+      <?= /* @noEscape */ $block->isBackgroundColor()?>
+      <?=$block->isIconSize() ?>
+    }
+
+    .total-shared {
+      width: fit-content;
+    }
+
+  </style>
+
+  <input type="checkbox" id="social-show" class="show-social-input">
+  <div class="social-group <?=$block->getProductPagePosition() ?>">
+  <div <?php if ($block->isButtonStyle() !== 5): ?>style="<?=$block->isIconSize() ?>"<?php endif; ?> class="total-shared"><span id="total-number"><?=$totalShared ?></span><span>Shares</span></div>
+  
+    <div class="<?=$facebook ?>">
+      <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px" <?php endif; ?> class="fbSharing background"><a id="fb-href"><?=$block->getButtonFb() ?></a><div id="<?=$block->isShareCounter() ?>"><span id="fb"><?=$fbCount ?></span></div>
+      </div>
+      <div>
+          <button id="save-fb" type="button" title="Save"></button>
+      </div>
+    </div>
+    <div class="<?=$twitter ?>">
+      <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px"<?php endif; ?> class="twSharing background"><a id="tw-href" href="http://twitter.com/intent/tweet?url=<?=$urlInterface->getCurrentUrl(); ?>"><?=$block->getButtonTw() ?></a><div id="<?=$block->isShareCounter() ?>"><span id="tw"><?=$twCount ?></span></div></div>
+    </div>
+    <div class="<?=$pin ?>">
+      <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px"<?php endif; ?> class="pinSharing background"><a id="pin-href" href="https://www.pinterest.com/pin/create/button/" data-pin-do="buttonPin" data-pin-custom="true"><?=$block->getButtonPin() ?></a><div id="<?=$block->isShareCounter() ?>"><span id="pin"><?=$pinCount ?></span></div></div>
+    </div>
+    <div class="<?=$linked ?>">
+      <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px"<?php endif; ?> class="linkSharing background">
+        <a id="link-href" href="https://linkedin.com/sharing/share-offsite/?url=<?=$urlInterface->getCurrentUrl(); ?>"><?=$block->getButtonLink() ?></a><div id="<?=$block->isShareCounter() ?>"><span id="link"><?=$linkCount ?></span></div></div>
+    </div>
+    <div <?php if ($block->isButtonStyle() !== 5): ?>style="width:48px;height:30px"<?php endif; ?> class="<?=$block->isAddMoreShare() ?>"></div>
+    <label for="social-show" class="close-social"><</label>
+  </div>
+  <label <?php if ($block->isButtonStyle() !== 5): ?>style="width:32px;height:32px"<?php endif; ?> for="social-show" class="show-social"><i class="fas fa-share-alt"></i></label>
+
+    <!-- Thank you popup -->
+  <div id="modal">
+    <div style="display: flex;justify-content: flex-start;">
+      <div class="<?=$facebook ?>">
+        <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px" <?php endif; ?> class="fbSharing background"><a id="fb-href"><i class="fab fa-facebook-f"></i></a></div>
+        <div id="<?=$block->isShareCounter() ?>"><span id='fb'><?=$fbCount ?></span></div>
+      </div>
+      <div class="<?=$twitter ?>">
+        <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px" <?php endif; ?> class="twSharing background"><a id="tw-href" href="http://twitter.com/intent/tweet?url=<?=$urlInterface->getCurrentUrl(); ?>"><i class="fab fa-twitter"></i></a></div>
+        <div id="<?=$block->isShareCounter() ?>"><span><?=$twCount ?></span></div>
+      </div>
+      <div class="<?=$pin ?>">
+        <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px" <?php endif; ?> class="pinSharing background"><a id="pin-href" href="https://www.pinterest.com/pin/create/button/" data-pin-do="buttonPin"   data-pin-custom="true"><i class="fab fa-pinterest-p"></i></a></div>
+        <div id="<?=$block->isShareCounter() ?>"><span><?=$pinCount ?></span></div>
+      </div>
+      <div class="<?=$linked ?>">
+        <div <?php if ($block->isButtonStyle() === 5): ?> style="width:70px;height:32px" <?php endif; ?> class="linkSharing background">
+          <a id="link-href" href="https://linkedin.com/sharing/share-offsite/?url=<?=$urlInterface->getCurrentUrl(); ?>"><i class="fab fa-linkedin-in"></i></a></div>
+        <div id="<?=$block->isShareCounter() ?>"><span><?=$linkCount ?></span></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    (function(d){
+        var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');
+        p.type = 'text/javascript';
+        p.async = true;
+        p.src = '//assets.pinterest.com/js/pinit.js';
+        f.parentNode.insertBefore(p, f);
+    }(document));
+  </script>
+
+  <script>
+    require(['jquery'],function($){
+    var counter = <?=$fbCount ?>;
+    $('#fb-href').click(function(event) {
+      FB.ui(
+      {
+        method: 'share',
+        href: '<?=$urlInterface->getCurrentUrl(); ?>',
+      },
+      function(response) {
+        if (response && !response.error_message) {
+            $("#save-fb").click();
+            document.getElementById('fb').innerHTML = ++counter;
+        } else {
+          console.log('awesome');
+        }
+      }
+      );
+    });
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '508127070406898',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v11.0'
+      });
+    };
+  });
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+  <script>
+    require(['jquery'],function($){
+        $('#save-fb').on('click', function (){
+            var urlFb = "<?php echo $block->getUrl('social/share/savefb') ?>";
+              jQuery.ajax({
+                url: urlFb,
+                data: { sharedUrl: '<?=$urlInterface->getCurrentUrl(); ?>' },
+                type: "POST",
+                showLoader: true,
+            });
+        });
+        $('#tw-href').on('click', function (){
+            var urlTw = "<?php echo $block->getUrl('social/share/savetw') ?>";
+              jQuery.ajax({
+                url: urlTw,
+                data: { sharedUrl: '<?=$urlInterface->getCurrentUrl(); ?>' },
+                type: "POST",
+                showLoader: true,
+            });
+          var twCounter = <?=$twCount ?>;
+          document.getElementById('tw').innerHTML = ++twCounter;
+          var width_tw = 575, 
+          height_tw = 400, 
+          left_tw = ($(window).width() - width_tw) / 2, 
+          top_tw = ($(window).height() - height_tw) / 2, 
+          url_tw = this.href, 
+          opts_tw = 'status=1' + ',width=' + width_tw + ',height=' + height_tw + ',top=' + top_tw + ',left=' + left_tw; 
+          window.open(url_tw, 'tweet', opts_tw); 
+          return false; 
+        });
+        $('#pin-href').on('click', function (){
+            var pinCounter = <?=$pinCount ?>;
+            document.getElementById('pin').innerHTML = ++pinCounter;
+            var urlPin = "<?php echo $block->getUrl('social/share/savepin') ?>";
+              jQuery.ajax({
+                url: urlPin,
+                data: { sharedUrl: '<?=$urlInterface->getCurrentUrl(); ?>' },
+                type: "POST",
+                showLoader: true,
+            });
+        });
+        $('#link-href').on('click', function (){
+            var urlLink = "<?php echo $block->getUrl('social/share/savelink') ?>";
+              jQuery.ajax({
+                url: urlLink,
+                data: { sharedUrl: '<?=$urlInterface->getCurrentUrl(); ?>' },
+                type: "POST",
+                showLoader: true,
+            });
+          var linkCounter = <?=$linkCount ?>;
+          document.getElementById('link').innerHTML = ++linkCounter;
+          var width = 575, 
+          height = 400, 
+          left = ($(window).width() - width) / 2, 
+          top = ($(window).height() - height) / 2, 
+          url = this.href, 
+          opts = 'status=1' + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left; 
+          window.open(url, 'mywin', opts); 
+          return false; 
+        });
+    });
+  </script>
+
+  <script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/modal"
+    ],function($, modal) {
+
+        var options = {
+            type: 'popup',
+            responsive: true,
+            title: 'Thank for sharing',
+            buttons: [{
+                text: $.mage.__('Ok'),
+                class: '',
+                click: function () {
+                    this.closeModal();
+                }
+            }]
+        };
+
+        var popup = modal(options, $('#modal'));
+        $("#save-fb").click(function() {
+            $('#modal').modal('openModal');
+        });
+    });
+  </script>
+<?php endif; ?>
+<?php endif; ?>

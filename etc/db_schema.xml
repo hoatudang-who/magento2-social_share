@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Duonght
+ *
+ * This source file is subject to the Duonght Software License, which is available at https://www.duonght.com/license.
+ * Do not edit or add to this file if you wish to upgrade the to newer versions in the future.
+ * If you wish to customize this module for your needs.
+ * Please refer to https://www.duonght.com for more information.
+ *
+ * @category  Duonght
+ * @package   Duonght_SocialShare
+ * @copyright Copyright (C) 2021 Duonght (https://www.duonght.com)
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+   <table name="social_share_report" resource="default" engine="innodb" comment="Social Share Report">
+        <column xsi:type="int" name="report_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="shared_url" nullable="false" length="1024"
+                comment="Shared URL"/>
+        <column xsi:type="int" name="facebook" unsigned="true" nullable="false" identity="false" default="0" comment="Share by Facebook"/>
+        <column xsi:type="int" name="twitter" unsigned="true" nullable="false" identity="false" default="0" comment="Share by Twitter"/>
+        <column xsi:type="int" name="pinterest" unsigned="true" nullable="false" identity="false" default="0" comment="Share by Pinterest"/>
+        <column xsi:type="int" name="linkedin" unsigned="true" nullable="false" identity="false" default="0" comment="Share by LinkedIn"/>
+        <column xsi:type="int" name="total" unsigned="true" nullable="false" identity="false" default="0" comment="Share Total"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Share First Time"/>
+        <column xsi:type="datetime" name="updated_at" nullable="true" default="CURRENT_TIMESTAMP" on_update="true" comment="Share Recently"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="report_id"/>
+        </constraint>
+    </table>
+    <table name="social_share_details" resource="default" engine="innodb" comment="Social Share Details">
+        <column xsi:type="int" name="share_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="social_name" nullable="false" length="100"
+                comment="Social Network"/>
+        <column xsi:type="varchar" name="shared_url" nullable="false" length="1024"
+                comment="Shared URL"/>
+        <column xsi:type="timestamp" name="update_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Update Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="share_id"/>
+        </constraint>
+    </table>
+</schema>
